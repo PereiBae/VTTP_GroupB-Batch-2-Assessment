@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of News Articles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .news-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .news-image img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .news-content {
+            flex: 1;
+        }
+
+        .news-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 5px 0;
+        }
+
+        .news-description {
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .list-inline {
+            list-style: none;
+            padding: 0;
+        }
+
+        .list-inline li {
+            display: inline;
+            margin-right: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .news-meta {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .news-link {
+            color: blue;
+            text-decoration: none;
+        }
+
+        .news-save {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .news-save input {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1>Crypto News of the Day</h1>
+    <button form="saveForm" type="submit">Save</button>
+</div>
+
+<div th:if="${message}" class="alert">
+    <p th:text="${message}"></p>
+</div>
+
+<form id="saveForm" th:action="@{/articles}" method="post">
+    <div th:each="article : ${news}" class="news-container">
+        <!-- Placeholder for news image -->
+        <div class="news-image">
+            <img th:src="${article.imageURL}" alt="News Image">
+        </div>
+
+        <!-- Content section -->
+        <div class="news-content">
+            <p class="news-meta">
+                <span>Id: <span th:text="${article.id}">ID</span></span>
+            </p>
+            <p class="news-title" th:text="${article.title}">Title</p>
+            <p class="news-description" th:text="${article.body}">Description</p>
+            <p class="news-meta">
+                <span>Categories:</span>
+            <ul class="list-inline">
+                <!-- Iterate over categories list -->
+                <li th:each="category : ${article.category}" th:text="${category}"></li>
+            </ul>
+            <p class="news-meta">
+                <span>Tags:</span>
+            <ul class="list-inline">
+                <!-- Iterate over tags list -->
+                <li th:each="tags : ${article.keyWords}" th:text="${tags}"></li>
+            </ul>
+            <p class="news-meta">
+                <span>Published: <span th:text="${article.publishedDate}">Published Date</span></span>
+            </p>
+            <p>
+                <a th:href="${article.url}" class="news-link">Link</a>
+            </p>
+            <div class="news-save">
+                <label>
+                    <input type="checkbox" th:name="savedArticles" th:value="${article.id}">
+                    Save
+                </label>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>
