@@ -38,12 +38,12 @@ public class NewsController {
     }
 
     @PostMapping("/articles")
-    public String saveNews(@RequestParam("savedArticles") List<Integer> articleIds,HttpSession session, Model model) {
+    public String saveNews(@RequestParam(value = "savedArticles", required = false) List<Integer> articleIds, HttpSession session, Model model) {
         // Retrieve the cached articles from the session
         @SuppressWarnings("unchecked")
         List<News> currentArticles = (List<News>) session.getAttribute("currentArticles");
-
-        if (currentArticles == null || currentArticles.isEmpty()) {
+        
+        if (articleIds == null || articleIds.isEmpty()) {
             model.addAttribute("message", "No articles to save. Please refresh and try again.");
             return "redirect:/";
         }
@@ -60,6 +60,7 @@ public class NewsController {
         model.addAttribute("message", "Selected articles have been saved successfully!");
 
         return "redirect:/";
+
     }
 
     // Day 18 - slide 8
